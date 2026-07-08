@@ -463,7 +463,7 @@
 
     <!-- Text Clock -->
     <string-array name="numbers">
-        <item>Zero</item>
+        <item>O'Clock</item>
         <item>Oh One</item>
         <item>Oh Two</item>
         <item>Oh Three</item>
