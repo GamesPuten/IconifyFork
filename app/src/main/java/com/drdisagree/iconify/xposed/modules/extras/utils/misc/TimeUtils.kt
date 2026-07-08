@@ -160,4 +160,84 @@ object TimeUtils {
         }
         hourView.setText(spannableString, TextView.BufferType.SPANNABLE)
     }
+
+    // New fuzzy time setter that uses getNumberString() and getFuzzString()
+    fun setCurrentTimeFuzzy(
+        context: Context,
+        modRes: Resources,
+        hourView: TextView,
+        minuteView: TextView
+    ) {
+        val cal = Calendar.getInstance()
+        val minute = cal.get(Calendar.MINUTE)
+        // Use 12-hour display for fuzzy wording
+        val hourRaw = cal.get(Calendar.HOUR) // 0..11
+        var displayHour = if (hourRaw == 0) 12 else hourRaw // convert 0 -> 12
+    
+        // o'clock if within 2 minutes of the hour (<=2) or within last 2 minutes (>=58)
+        if (minute <= 2 || minute >= 58) {
+            minuteView.text = getFuzzString(modRes, 0) // "o'clock"
+            hourView.text = getNumberString(modRes, displayHour)
+            return
+        }
+    
+        // Round to nearest 5 minutes (adding 2 -> rounds ties toward nearest)
+        val rounded = ((minute + 2) / 5) * 5
+        if (rounded == 60) {
+            // Rounds up to the next hour and becomes o'clock
+            displayHour = (displayHour % 12) + 1
+            minuteView.text = getFuzzString(modRes, 0) // "o'clock"
+            hourView.text = getNumberString(modRes, displayHour)
+            return
+        }
+    
+        // Map rounded minute to fuzz index:
+        // 5 -> index 1, 10 -> 2, 15 -> 3, 20 -> 4, 25 -> 5, 30 -> 6
+        fun fuzzIndexFor(mins: Int): Int = when (mins) {
+            0 -> 0
+            5 -> 1
+            10 -> 2
+            15 -> 3
+            20 -> 4
+            25 -> 5
+            30 -> 6
+            else -> 0
+        }
+    
+        if (rounded <= 30) {
+            val idx = fuzzIndexFor(rounded)
+            val fuzz = getFuzzString(modRes, idx)
+            minuteView.text = "$fuzz past"
+            hourView.text = getNumberString(modRes, displayHour)
+        } else {
+            val minsTo = 60 - rounded
+            val idx = fuzzIndexFor(minsTo)
+            val fuzz = getFuzzString(modRes, idx)
+            // roll hour forward for "to"
+            displayHour = (displayHour % 12) + 1
+            minuteView.text = "$fuzz to"
+            hourView.text = getNumberString(modRes, displayHour)
+        }
+    }
+    
+    // Replace the calls in setCurrentTimeTextClock to use the fuzzy setter and keep the TextWatcher
+    fun setCurrentTimeTextClockFuzzy(
+        context: Context,
+        modRes: Resources,
+        tickIndicator: TextClock,
+        hourView: TextView,
+        minuteView: TextView
+    ) {
+        setCurrentTimeFuzzy(context, modRes, hourView, minuteView)
+    
+        tickIndicator.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                if (!s.isNullOrEmpty()) {
+                    setCurrentTimeFuzzy(context, modRes, hourView, minuteView)
+                }
+            }
+        })
+    }
 }
