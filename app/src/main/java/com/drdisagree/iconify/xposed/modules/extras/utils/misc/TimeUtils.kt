@@ -165,8 +165,8 @@ object TimeUtils {
     fun setCurrentTimeFuzzy(
         context: Context,
         modRes: Resources,
-        hourView: TextView,
-        minuteView: TextView
+        hourViewFuzz: TextView,
+        minuteViewFuzz: TextView
     ) {
         val cal = Calendar.getInstance()
         val minute = cal.get(Calendar.MINUTE)
@@ -176,8 +176,8 @@ object TimeUtils {
     
         // o'clock if within 2 minutes of the hour (<=2) or within last 2 minutes (>=58)
         if (minute <= 2 || minute >= 58) {
-            minuteView.text = getFuzzString(modRes, 0) // "o'clock"
-            hourView.text = getNumberString(modRes, displayHour)
+            minuteViewFuzz.text = getFuzzString(modRes, 0) // "o'clock"
+            hourViewFuzz.text = getNumberString(modRes, displayHour)
             return
         }
     
@@ -186,8 +186,8 @@ object TimeUtils {
         if (rounded == 60) {
             // Rounds up to the next hour and becomes o'clock
             displayHour = (displayHour % 12) + 1
-            minuteView.text = getFuzzString(modRes, 0) // "o'clock"
-            hourView.text = getNumberString(modRes, displayHour)
+            minuteViewFuzz.text = getFuzzString(modRes, 0) // "o'clock"
+            hourViewFuzz.text = getNumberString(modRes, displayHour)
             return
         }
     
@@ -207,16 +207,16 @@ object TimeUtils {
         if (rounded <= 30) {
             val idx = fuzzIndexFor(rounded)
             val fuzz = getFuzzString(modRes, idx)
-            minuteView.text = "$fuzz past"
-            hourView.text = getNumberString(modRes, displayHour)
+            minuteViewFuzz.text = "$fuzz past"
+            hourViewFuzz.text = getNumberString(modRes, displayHour)
         } else {
             val minsTo = 60 - rounded
             val idx = fuzzIndexFor(minsTo)
             val fuzz = getFuzzString(modRes, idx)
             // roll hour forward for "to"
             displayHour = (displayHour % 12) + 1
-            minuteView.text = "$fuzz to"
-            hourView.text = getNumberString(modRes, displayHour)
+            minuteViewFuzz.text = "$fuzz to"
+            hourViewFuzz.text = getNumberString(modRes, displayHour)
         }
     }
     
@@ -225,17 +225,17 @@ object TimeUtils {
         context: Context,
         modRes: Resources,
         tickIndicator: TextClock,
-        hourView: TextView,
-        minuteView: TextView
+        hourViewFuzz: TextView,
+        minuteViewFuzz: TextView
     ) {
-        setCurrentTimeFuzzy(context, modRes, hourView, minuteView)
+        setCurrentTimeFuzzy(context, modRes, hourViewFuzz, minuteViewfuzz)
     
-        tickIndicator.addTextChangedListener(object : TextWatcher {
+        tickIndicatorFuzz.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable?) {
                 if (!s.isNullOrEmpty()) {
-                    setCurrentTimeFuzzy(context, modRes, hourView, minuteView)
+                    setCurrentTimeFuzzy(context, modRes, hourViewFuzz, minuteViewFuzz)
                 }
             }
         })
