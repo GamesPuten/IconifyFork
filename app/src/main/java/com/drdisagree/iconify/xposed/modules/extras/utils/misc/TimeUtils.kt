@@ -26,6 +26,11 @@ object TimeUtils {
         return numbers.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
+    private fun getFuzzString(modRes: Resources, index: Int): String {
+        val fuzz = modRes.getStringArray(R.array.fuzz)
+        return fuzz.getOrElse(index) { modRes.getString(R.string.not_available) }
+    }
+
     fun regionFormattedDate(usFormat: String?, euFormat: String?): String {
         try {
             val currentDate = Date()
