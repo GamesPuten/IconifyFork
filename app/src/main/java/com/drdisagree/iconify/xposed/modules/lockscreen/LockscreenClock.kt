@@ -889,16 +889,16 @@ class LockscreenClock(context: Context) : ModPack(context) {
                 }
 
                 69 -> {
-                    val hourView = findViewContainingTag("textHour") as TextView
-                    val minuteView = findViewContainingTag("textMinute") as TextView
-                    val tickIndicator = findViewContainingTag("tickIndicator") as TextClock
+                    val hourViewFuzz = findViewContainingTag("textHour") as TextView
+                    val minuteViewFuzz = findViewContainingTag("textMinute") as TextView
+                    val tickIndicatorFuzz = findViewContainingTag("tickIndicator") as TextClock
 
                     TimeUtils.setCurrentTimeTextClock(
                         context = mContext,
                         modRes = modRes,
                         tickIndicator = tickIndicator,
-                        hourView = hourView,
-                        minuteView = minuteView
+                        hourViewFuzz = hourViewFuzz,
+                        minuteViewFuzz = minuteViewFuzz
                     )
                 }
             }
