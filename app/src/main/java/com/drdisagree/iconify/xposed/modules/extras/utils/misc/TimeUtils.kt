@@ -32,7 +32,7 @@ object TimeUtils {
     }
 
     private fun getHourhhString(modRes: Resources, index: Int): String {
-        val hourshh = modRes.getStringArray(R.array.hours)
+        val hourshh = modRes.getStringArray(R.array.hourshh)
         return hourshh.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
