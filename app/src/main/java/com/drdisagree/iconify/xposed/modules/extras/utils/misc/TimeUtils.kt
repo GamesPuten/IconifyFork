@@ -86,7 +86,7 @@ object TimeUtils {
             hourFormat,
             Locale.getDefault()
         ).format(Calendar.getInstance().time)
-        hourView.text = getNumberString(modRes, hour.toInt())
+        hourView.text = getHourString(modRes, hour.toInt())
     }
 
     private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
