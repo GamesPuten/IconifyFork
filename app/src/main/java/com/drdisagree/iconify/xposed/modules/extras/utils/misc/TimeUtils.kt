@@ -26,9 +26,14 @@ object TimeUtils {
         return numbers.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
-    private fun getHourString(modRes: Resources, index: Int): String {
-        val hours = modRes.getStringArray(R.array.hours)
-        return hours.getOrElse(index) { modRes.getString(R.string.not_available) }
+    private fun getHourHHString(modRes: Resources, index: Int): String {
+        val hoursHH = modRes.getStringArray(R.array.hoursHH)
+        return hoursHH.getOrElse(index) { modRes.getString(R.string.not_available) }
+    }
+
+    private fun getHourhhString(modRes: Resources, index: Int): String {
+        val hourshh = modRes.getStringArray(R.array.hours)
+        return hourshh.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
     fun regionFormattedDate(usFormat: String?, euFormat: String?): String {
@@ -86,9 +91,29 @@ object TimeUtils {
             hourFormat,
             Locale.getDefault()
         ).format(Calendar.getInstance().time)
-        hourView.text = getHourString(modRes, hour.toInt())
-    }
+        //hourView.text = getHourString(modRes, hour.toInt())
+        val hourText = if (hourFormat == "HH") {
+                    // Use getHourHHString for 24-hour format, fallback to getNumberString
+                    try {
+                        getHourHHString(modRes, hour.toInt())
+                    } catch (t: Throwable) {
+                        getNumberString(modRes, hour.toInt())
+                    }
+                } else {
+                    // Use getHourhhString for 12-hour format, fallback to getNumberString
+                    try {
+                        getHourhhString(modRes, hour.toInt())
+                    } catch (t: Throwable) {
+                        getNumberString(modRes, hour.toInt())
+                    }
+                }
+            
+                hourView.text = hourText
+            }
+        }
 
+        
+    
     private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
         val minuteFormat = "mm"
         val minute = SimpleDateFormat(
