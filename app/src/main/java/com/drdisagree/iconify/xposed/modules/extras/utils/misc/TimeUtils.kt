@@ -107,12 +107,8 @@ object TimeUtils {
                         getNumberString(modRes, hour.toInt())
                     }
                 }
-            
                 hourView.text = hourText
-            }
-        }
-
-        
+            }     
     
     private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
         val minuteFormat = "mm"
