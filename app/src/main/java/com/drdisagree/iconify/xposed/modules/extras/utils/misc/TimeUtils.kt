@@ -26,6 +26,11 @@ object TimeUtils {
         return numbers.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
+    private fun getHourString(modRes: Resources, index: Int): String {
+        val hours = modRes.getStringArray(R.array.hours)
+        return hours.getOrElse(index) { modRes.getString(R.string.not_available) }
+    }
+
     fun regionFormattedDate(usFormat: String?, euFormat: String?): String {
         try {
             val currentDate = Date()
