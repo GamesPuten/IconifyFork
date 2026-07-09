@@ -526,7 +526,8 @@
         <item>Sixty</item>
     </string-array>
 
-    <string-array name="hours">
+    <string-array name="hoursHH">
+        <item>Zero</item>
         <item>One</item>
         <item>Two</item>
         <item>Three</item>
@@ -553,6 +554,33 @@
         <item>Twenty-Four</item>
     </string-array>
 
+    <string-array name="hourshh">
+        <item>Twelve</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+        <item>Twelve</item>
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Four</item>
+        <item>Five</item>
+        <item>Six</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Ten</item>
+        <item>Eleven</item>
+    </string-array>
+    
     <string-array name="lockscreen_visualizer_color_mode_entries">
         <item>Static</item>
         <item>Lava</item>
