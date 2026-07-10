@@ -21,17 +21,20 @@ import java.util.Locale
 
 object TimeUtils {
 
-    private fun getNumberString(modRes: Resources, index: Int): String { // Get numbers for text clock
+    // Get numbers for text clock
+    private fun getNumberString(modRes: Resources, index: Int): String { 
         val numbers = modRes.getStringArray(R.array.numbers)
         return numbers.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
-    private fun getHourHHString(modRes: Resources, index: Int): String { // Get hour strings for 24-hour text clock
+    // Get hour strings for 24-hour text clock
+    private fun getHourHHString(modRes: Resources, index: Int): String { 
         val hoursHH = modRes.getStringArray(R.array.hoursHH)
         return hoursHH.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
-    private fun getHourhhString(modRes: Resources, index: Int): String { // Get hour strings for 12-hour text clock
+    // Get hour strings for 12-hour text clock
+    private fun getHourhhString(modRes: Resources, index: Int): String { 
         val hourshh = modRes.getStringArray(R.array.hourshh)
         return hourshh.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
@@ -68,21 +71,20 @@ object TimeUtils {
             Locale.getDefault()
         ).format(Calendar.getInstance().time)
         val hourText = if (hourFormat == "HH") {
-                    try {
-                        getHourHHString(modRes, hour.toInt()) // Use getHourHHString for 24-hour format
-                    } catch (t: Throwable) {
-                        getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
-                    }
-                } else {
-                    , fallback to getNumberString
-                    try {
-                        getHourhhString(modRes, hour.toInt()) // Use getHourhhString for 12-hour format
-                    } catch (t: Throwable) {
-                        getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
-                    }
-                }
-                hourView.text = hourText
-            }     
+            try {
+                getHourHHString(modRes, hour.toInt()) // Use getHourHHString for 24-hour format
+            } catch (t: Throwable) {
+                getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
+            }
+        } else {
+            try {
+                getHourhhString(modRes, hour.toInt()) // Use getHourhhString for 12-hour format
+            } catch (t: Throwable) {
+                getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
+            }
+        }
+        hourView.text = hourText
+    }     
     
     private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
         val minuteFormat = "mm"
