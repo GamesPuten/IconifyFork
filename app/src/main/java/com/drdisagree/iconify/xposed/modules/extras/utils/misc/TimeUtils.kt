@@ -78,7 +78,9 @@ object TimeUtils {
             }
         } else {
             try {
-                getHourhhString(modRes, hour.toInt()) // Use getHourhhString for 12-hour format
+                val hourInt = hour.toInt()
+                val hourIndex = if (hourInt == 0) 11 else hourInt - 1
+                getHourhhString(modRes, hourIndex) // Use getHourHHString for 12-hour format
             } catch (t: Throwable) {
                 getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
             }
