@@ -21,17 +21,17 @@ import java.util.Locale
 
 object TimeUtils {
 
-    private fun getNumberString(modRes: Resources, index: Int): String {
+    private fun getNumberString(modRes: Resources, index: Int): String { // Get numbers for text clock
         val numbers = modRes.getStringArray(R.array.numbers)
         return numbers.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
-    private fun getHourHHString(modRes: Resources, index: Int): String {
+    private fun getHourHHString(modRes: Resources, index: Int): String { // Get hour strings for 24-hour text clock
         val hoursHH = modRes.getStringArray(R.array.hoursHH)
         return hoursHH.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
 
-    private fun getHourhhString(modRes: Resources, index: Int): String {
+    private fun getHourhhString(modRes: Resources, index: Int): String { // Get hour strings for 12-hour text clock
         val hourshh = modRes.getStringArray(R.array.hourshh)
         return hourshh.getOrElse(index) { modRes.getString(R.string.not_available) }
     }
@@ -61,6 +61,38 @@ object TimeUtils {
         return SimpleDateFormat(format, Locale.getDefault()).format(Date())
     }
 
+    private fun setCurrentTimeHour(context: Context, modRes: Resources, hourView: TextView) {
+        val hourFormat = if (DateFormat.is24HourFormat(context)) "HH" else "hh"
+        val hour = SimpleDateFormat(
+            hourFormat,
+            Locale.getDefault()
+        ).format(Calendar.getInstance().time)
+        val hourText = if (hourFormat == "HH") {
+                    try {
+                        getHourHHString(modRes, hour.toInt()) // Use getHourHHString for 24-hour format
+                    } catch (t: Throwable) {
+                        getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
+                    }
+                } else {
+                    , fallback to getNumberString
+                    try {
+                        getHourhhString(modRes, hour.toInt()) // Use getHourhhString for 12-hour format
+                    } catch (t: Throwable) {
+                        getNumberString(modRes, hour.toInt()) // Fallback to getNumberString
+                    }
+                }
+                hourView.text = hourText
+            }     
+    
+    private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
+        val minuteFormat = "mm"
+        val minute = SimpleDateFormat(
+            minuteFormat,
+            Locale.getDefault()
+        ).format(Calendar.getInstance().time)
+        minuteView.text = getNumberString(modRes, minute.toInt())
+    }
+
     fun setCurrentTimeTextClock(
         context: Context,
         modRes: Resources,
@@ -84,41 +116,7 @@ object TimeUtils {
             }
         })
     }
-
-    private fun setCurrentTimeHour(context: Context, modRes: Resources, hourView: TextView) {
-        val hourFormat = if (DateFormat.is24HourFormat(context)) "HH" else "hh"
-        val hour = SimpleDateFormat(
-            hourFormat,
-            Locale.getDefault()
-        ).format(Calendar.getInstance().time)
-        //hourView.text = getHourString(modRes, hour.toInt())
-        val hourText = if (hourFormat == "HH") {
-                    // Use getHourHHString for 24-hour format, fallback to getNumberString
-                    try {
-                        getHourHHString(modRes, hour.toInt())
-                    } catch (t: Throwable) {
-                        getNumberString(modRes, hour.toInt())
-                    }
-                } else {
-                    // Use getHourhhString for 12-hour format, fallback to getNumberString
-                    try {
-                        getHourhhString(modRes, hour.toInt())
-                    } catch (t: Throwable) {
-                        getNumberString(modRes, hour.toInt())
-                    }
-                }
-                hourView.text = hourText
-            }     
     
-    private fun setCurrentTimeMinute(modRes: Resources, minuteView: TextView) {
-        val minuteFormat = "mm"
-        val minute = SimpleDateFormat(
-            minuteFormat,
-            Locale.getDefault()
-        ).format(Calendar.getInstance().time)
-        minuteView.text = getNumberString(modRes, minute.toInt())
-    }
-
     fun isSecurityPatchBefore(targetDate: Calendar): Boolean {
         val securityPatch = Build.VERSION.SECURITY_PATCH
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
